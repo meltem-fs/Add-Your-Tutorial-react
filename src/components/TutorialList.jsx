@@ -20,6 +20,18 @@ const TutorialList = ({ tutorials,getTutorials }) => {
 
   const doEdit = (id, title, description)=>{
     setEdit({id:id, title:title, description:description})
+    putEdit(id,title,description)
+  }
+
+  const putEdit = async(id,title,description)=>{
+    const url = `https://axios-example-cw.herokuapp.com/api/tutorials/${id}`;
+
+    try {
+      await axios.put(url,{title,description})
+    } catch (error) {
+      console.log(error);
+    }
+    getTutorials()
   }
 
 
@@ -66,7 +78,7 @@ const TutorialList = ({ tutorials,getTutorials }) => {
           })}
         </tbody>
       </table>
-      <EditTutorial doEdit={doEdit} />
+      <EditTutorial doEdit={doEdit} edit={edit} putEdit={putEdit} />
     </div>
   );
 };
