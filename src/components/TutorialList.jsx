@@ -1,7 +1,28 @@
 import { FaEdit } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
+import EditTutorial from "./EditTutorial";
+import axios from "axios";
+import { useState } from "react";
 
 const TutorialList = ({ tutorials,getTutorials }) => {
+
+  const [edit, setEdit] = useState({id:"", title:"", description:""})
+
+  const deleteTutorial = async(id)=>{
+    const url = `https://axios-example-cw.herokuapp.com/api/tutorials/${id}`;
+    try {
+      await axios.delete(url)
+    } catch (error) {
+      console.log(error)
+    }
+    getTutorials()
+  }
+
+  const doEdit = (id, title, description)=>{
+    setEdit({id:id, title:title, description:description})
+  }
+
+
 
   return (
     <div className="container mt-4">
@@ -28,12 +49,16 @@ const TutorialList = ({ tutorials,getTutorials }) => {
                   <FaEdit
                     size={20}
                     type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#edit-modal"
                     className="me-2 text-warning"
+                    onClick={() => doEdit(id, title, description)}
                   />
                   <AiFillDelete
                     size={22}
                     type="button"
                     className="text-danger "
+                    onClick={() => deleteTutorial(id)}
                   />
                 </td>
               </tr>
@@ -41,6 +66,7 @@ const TutorialList = ({ tutorials,getTutorials }) => {
           })}
         </tbody>
       </table>
+      <EditTutorial doEdit={doEdit} />
     </div>
   );
 };

@@ -1,13 +1,33 @@
+import axios from "axios";
 import { useState } from "react";
 
-const AddTutorial = () => {
+const AddTutorial = ({ getTutorials }) => {
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+    const newTutor = {title,description}
+   addTutorial(newTutor);
+
   };
+
+  const addTutorial = async (newTutor) => {
+    const url = "https://axios-example-cw.herokuapp.com/api/tutorials";
+    try {
+      await axios.post(url, newTutor);
+    } catch (error) {
+      console.log(error);
+    }
+
+    getTutorials();
+  };
+
+
+
+
 
   return (
     <div className="container text-center mt-4">
